@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        .button{
+            height: 200px;
+            width: 200px;
+        }
+        button {
+            background-color:transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .buttons{
+            display: flex;
+            justify-content: center;
+        }
+
+        .divider{
+            border:  solid black;
+            
+        }
+
+        .pickMoves{
+            display: flex;
+        }
+        
+        .results{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        main{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+</head>
+<body>
+    <header class="container-fluid text-center bg-dark text-light p-4">
+        <h1>Rock Paper Scissors Game</h1>
+    </header>
+    <a href="https://ric2thiss.github.io/">Back</a>
+    <main>
+        <div class="buttons my-5">
+            <button onclick="startGame('rock')"><img src="rock.png" alt="Rock" class="button"></button>
+            <button onclick="startGame('paper')"><img src="paper.png" alt="Paper" class="button"></button>
+            <button onclick="startGame('scissors')"><img src="scissor.png" alt="Scissor" class="button"></button>
+        </div>
+        
+        <div id="results" class="py-5">
+
+        </div>
+        <div id="scoress"></div>
+        <button class="btn btn-danger btn-lg" onclick="
+        localStorage.removeItem('score')
+        ">Reset</button>
+    </main>
+    <footer class="container-fluid d-flex justify-content-between my-5 text-dark p-3">
+        <p>All rights reserved 2023.</p>
+        <p>Developed by Ric</p>
+    </footer>
+
+     <!-- Bootstrap -->
+     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+     <!-- Logic -->
+    <script>
+        const resultbox = document.getElementById('results');
+        const score = JSON.parse(localStorage.getItem('score')) || {
+            wins: 0,
+            losses: 0,
+            tie: 0,
+        }
+        console.log(score)
+        let pickMoves;
+        let computerpickedMove;
+        let result;
+        function pickComputerMove(){
+            let computerMove;
+            const randomNumber = Math.random();
+            if(randomNumber > 0 && randomNumber < 1/3){
+                computerMove = 'rock'
+            }else if(randomNumber > 1/3 && randomNumber < 2/3){
+                computerMove = 'paper'
+            }else if(randomNumber > 2/3 && randomNumber < 1){
+                computerMove = 'scissors'
+            }
+            return computerMove
+        }
+
+
+        function startGame(e){
+            const computerMove = pickComputerMove();
+           if(computerMove === e){
+            result = 'Draw';
+            score.tie+=1;
+           }else if(
+            computerMove === 'rock' && e === 'scissors' 
+           || computerMove === 'paper' && e === 'rock' 
+           || computerMove === 'scissors' && e === 'paper'){
+            result = 'You Lose';
+            score.losses+=1;
+            
+           }else if(
+            e === 'rock' && computerMove === 'scissors' 
+           || e === 'paper' && computerMove === 'rock' 
+           || e === 'scissors' && computerMove === 'paper'){
+            result = 'You Win';
+            score.wins+=1;
+           }
+           console.log(computerMove)
+           localStorage.setItem('score', JSON.stringify(score))
+
+           if(e === 'rock'){
+            pickMoves = 'rock.png'
+           }else if(e === 'paper'){
+            pickMoves = 'paper.png'
+           }else if(e === 'scissors'){
+            pickMoves = 'scissor.png'
+           }
+
+           if(computerMove === 'rock'){
+            computerpickedMove = 'rock.png'
+           }else if(computerMove === 'paper'){
+            computerpickedMove = 'paper.png'
+           }else if(computerMove === 'scissors'){
+            computerpickedMove  = 'scissor.png'
+           }
+           
+           const scoress = document.getElementById('scoress')
+           scoress.innerHTML = `
+           <div class="container d-flex text-center fs-5 fw-bold">
+            <p>Wins : ${score.wins}</p>|
+            <p>Losses: ${score.losses}</p>|
+            <p>Draws : ${score.tie}</p>
+            </div>
+           `
+
+
+           setTimeout(() =>{
+            resultbox.innerHTML = `
+           <hr>
+           <div class="pickMoves">
+            <img class="button" src=${pickMoves}>
+            <div class="text-center fw-bold fs-1 d-flex align-items-center justify-center p-4"><p>${result}</p></div>
+            <img class="button" src=${computerpickedMove}>
+            </div>
+            <hr>
+           `;
+           }, 1000)
+           
+        //    alert(`Wins : ${score.wins}, Losses: ${score.losses}, Draws: ${score.tie}`)
+        }
+    </script>
+</body>
+</html>

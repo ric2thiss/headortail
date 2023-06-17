@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Coin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        button {
+            margin: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+        }
+        #containerresult img {
+            max-height: 20rem!important;
+            }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        footer{
+          
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="mb-5">Head or Tail Game</h1>
+    <div class="gamecontainer d-flex justify-content-center align-center">
+        <button onclick="pickWinner('heads')"><img src="heads.png" alt="" width="200" height="200"></button>
+        <button onclick="pickWinner('tails')"><img src="tail.png" alt="" width="100%" height="200"></button>
+    </div>
+    <div id="containerresult" class="d-flex align-items-center justify-content-center my-5">
+
+    </div>
+    <footer class="container-fluid bg-dark text-light d-flex justify-content-between p-5">
+        <p>All rights reserved. 2023</p>
+        <p>Developed by Ric</p>
+    </footer>
+         <!-- Bootstrap -->
+         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+         <!-- Logic -->
+    <script>
+        
+        // Answer Generator
+        function RightAnswer(){
+            const randomNumber = Math.random();
+            let rightAnswer;
+        if (randomNumber > 0.5) {
+            rightAnswer = 'heads';
+        }else{
+            rightAnswer = 'tails';
+        }
+        return rightAnswer;
+        }
+        console.log(RightAnswer())
+
+        // Computer Opponent Generator
+        function computerMoves(){
+            const randomNumber = Math.random();
+            let computerGuess;
+            if(randomNumber > 0.5){
+                computerGuess  = 'heads';
+            }else{
+                computerGuess  = 'tails';
+            }
+
+            return computerGuess;
+        }
+        console.log(computerMoves())
+
+        // Comparing Answer of AI and player
+
+        function pickWinner(e){
+            const RightAnswers = RightAnswer();
+            const AiComputerAnswer = computerMoves();
+            const playerAnswer = e;
+            let displayResult;
+            
+            // const gamecontainer = document.querySelector('.gamecontainer')
+            // gamecontainer.innerHTML=`
+            // <video width="320" height="240" controls="false" style="pointer-events: none;" autoplay>
+            // <source src="giphy.mp4" type="video/mp4">
+            // Your browser does not support the video tag.
+            // </video>
+            // `;
+            if(RightAnswers === 'heads' && AiComputerAnswer === 'heads' && playerAnswer !== 'heads'){
+                displayResult = 'Computer Wins for picking heads'
+            }else if(RightAnswers === 'heads' && playerAnswer === 'heads' && AiComputerAnswer !== 'heads'){
+                displayResult ='You Win for picking heads'
+            }else if(RightAnswers === 'heads' && AiComputerAnswer === 'heads' && playerAnswer === 'heads'){
+                displayResult ='Both Wins for picking Heads'
+            }else if(RightAnswers === 'tails' && AiComputerAnswer === 'tails' && playerAnswer === 'tails'){
+                displayResult ='Both wins for picking tails'
+            }else if(RightAnswers === 'tails' && AiComputerAnswer === 'tails'){
+                displayResult ='Computer Wins for picking tails'
+            }else if(RightAnswers === 'tails' && playerAnswer === 'tails'){
+                displayResult ='You win for picking tails'
+            }else {
+                displayResult ='No winner the right answer is'+ " " + RightAnswers;
+                // + " " + playerAnswer + AiComputerAnswer
+            }
+
+            const containerresult = document.getElementById('containerresult')
+            containerresult.innerHTML = `<p class="lead">You picked <span class="fs-3">${e}</span> and Computer picked <span class="fs-3">${AiComputerAnswer}</span>  <br> The Answer is <span class="fs-3 text-primary">${RightAnswers}</span>  <br> <span class="fs-3">${displayResult}</span></p>`
+
+            setTimeout(() => {
+                containerresult.innerHTML = "";
+            }, 7000);
+        }
+
+    </script>
+</body>
+</html>
